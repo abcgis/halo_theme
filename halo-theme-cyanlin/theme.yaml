@@ -1,0 +1,38 @@
+
+apiVersion: theme.halo.run/v1alpha1
+kind: Theme
+metadata:
+  name: theme-cyanlin
+  labels:
+    name: theme-cyanlin
+    version: 1.0.1
+spec:
+  displayName: Cyanlin Portfolio
+  author:
+    name: Cyan Lin Theme
+    website: https://www.cyanlin.com
+  description: |
+    A minimal, illustration / portfolio oriented Halo theme inspired by cyanlin.com.
+    Features: 3-column portfolio grid, single column detail page with image gallery,
+    fixed top navigation, mobile-first responsive layout.
+  logo: assets/logo.svg
+  website: https://github.com/your-repo/halo-theme-cyanlin
+  repo: https://github.com/your-repo/halo-theme-cyanlin
+  version: 1.0.1
+  require:
+    halo: ">=2.10.0"
+  settingName: theme-cyanlin-setting
+  customTemplates:
+    portfolio:
+      name: Portfolio Detail
+      description: Single portfolio item layout (mirrors product_xxx.html).
+      screenshot: assets/templates/portfolio.png
+      file:
+        - portfolio.html.ftl
+    page_about:
+      name: About Layout
+      description: Two-column About layout (mirrors about.html).
+      screenshot: assets/templates/page-about.png
+      file:
+        - page_about.html.ftl
+

@@ -1,0 +1,22 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+coverage/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Claude Code internals
+.agents/
+.serena/
+
+dist/

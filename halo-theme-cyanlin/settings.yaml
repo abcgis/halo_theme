@@ -1,0 +1,73 @@
+apiVersion: theme.halo.run/v1alpha1
+kind: ThemeSetting
+metadata:
+  name: theme-cyanlin-setting
+  labels:
+    name: theme-cyanlin-setting
+spec:
+  groupRef: theme-cyanlin
+  fields:
+    - name: site_subtitle
+      defaultValue: Portfolio
+      label: Site Subtitle
+      help: Small text shown to the right of (or under) the site title.
+      type: text
+    - name: primary_color
+      defaultValue: "#38bdf8"
+      label: Primary Color
+      help: Brand accent color used for buttons, links, and focus rings.
+      type: color
+    - name: logo_text
+      defaultValue: "CYAN LIN"
+      label: Logo Text
+      help: Text shown when no logo image is provided.
+      type: text
+    - name: logo_image
+      label: Logo Image URL (optional)
+      help: Leave empty to use Logo Text only.
+      type: text
+    - name: nav_left
+      label: Left Navigation Items
+      type: json
+      defaultValue: |-
+        [
+          {"label": "PORTFOLIO", "url": "/", "target": "_self"},
+          {"label": "BEHANCE",   "url": "https://www.behance.net/",   "target": "_blank"}
+        ]
+    - name: nav_right
+      label: Right Navigation Items
+      type: json
+      defaultValue: |-
+        [
+          {"label": "INSTAGRAM", "url": "https://www.instagram.com/", "target": "_blank"},
+          {"label": "ABOUT",     "url": "/about",                    "target": "_self"}
+        ]
+    - name: footer_text
+      label: Footer Text
+      type: textarea
+      defaultValue: "© Cyan Lin. All illustrations belong to the original author."
+    - name: social_links
+      label: Social Links
+      type: json
+      defaultValue: |-
+        [
+          {"label": "Behance",   "url": "https://www.behance.net/",   "icon": "behance"},
+          {"label": "Instagram", "url": "https://www.instagram.com/", "icon": "instagram"},
+          {"label": "Email",     "url": "mailto:you@example.com",     "icon": "email"}
+        ]
+    - name: enable_search
+      defaultValue: "true"
+      label: Show Search Box
+      type: bool
+    - name: enable_rss
+      defaultValue: "true"
+      label: Show RSS Link
+      type: bool
+    - name: items_per_page
+      defaultValue: "12"
+      label: Portfolio items per page
+      type: number
+    - name: enable_lightbox
+      defaultValue: "true"
+      label: Lightbox on Portfolio Detail
+      type: bool
