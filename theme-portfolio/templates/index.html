@@ -1,0 +1,88 @@
+<!-- Home page: latest posts in a card grid. -->
+<html xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout :: layout(title = ${site.title}, content = ~{::content})}">
+  <th:block th:fragment="content">
+    <section class="page-header">
+      <div class="container">
+        <h1 th:text="${site.title}">Site Title</h1>
+        <p
+          th:if="${site.subtitle != null and not #strings.isEmpty(site.subtitle)}"
+          th:text="${site.subtitle}"
+        ></p>
+      </div>
+    </section>
+
+    <div class="container">
+      <th:block th:if="${posts != null and not #lists.isEmpty(posts.items)}">
+        <ul class="post-list">
+          <li class="post-card" th:each="post : ${posts.items}">
+            <a
+              class="cover"
+              th:if="${post.spec.cover != null and not #strings.isEmpty(post.spec.cover)}"
+              th:href="@{${post.status.permalink}}"
+              aria-hidden="true"
+              tabindex="-1"
+            >
+              <img th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy" />
+            </a>
+
+            <div class="body">
+              <h3>
+                <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">Title</a>
+              </h3>
+
+              <p
+                class="excerpt"
+                th:if="${post.status.excerpt != null and not #strings.isEmpty(post.status.excerpt)}"
+                th:text="${post.status.excerpt}"
+              ></p>
+
+              <div class="meta">
+                <time th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2024-01-01</time>
+                <span
+                  th:if="${post.categories != null and not #lists.isEmpty(post.categories)}"
+                >·</span>
+                <a
+                  th:each="cat,iter : ${post.categories}"
+                  th:if="${iter.index < 1}"
+                  th:href="@{${cat.status.permalink}}"
+                  th:text="${cat.spec.displayName}"
+                ></a>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Pagination -->
+        <nav class="pagination" th:if="${posts.totalPages != null and posts.totalPages > 1}">
+          <a
+            th:if="${posts.hasPrevious()}"
+            th:href="@{${posts.prevUrl}}"
+            rel="prev"
+          >&lsaquo; Prev</a>
+          <span th:unless="${posts.hasPrevious()}" class="disabled">&lsaquo; Prev</span>
+
+          <th:block th:each="p : ${#numbers.sequence(1, posts.totalPages)}">
+            <span th:if="${p == posts.page}" class="current" th:text="${p}">1</span>
+            <a
+              th:unless="${p == posts.page}"
+              th:href="@{${p == 1 ? '/' : ('/?page=' + p)}}"
+              th:text="${p}"
+            >2</a>
+          </th:block>
+
+          <a
+            th:if="${posts.hasNext()}"
+            th:href="@{${posts.nextUrl}}"
+            rel="next"
+          >Next &rsaquo;</a>
+          <span th:unless="${posts.hasNext()}" class="disabled">Next &rsaquo;</span>
+        </nav>
+      </th:block>
+
+      <div class="empty" th:unless="${posts != null and not #lists.isEmpty(posts.items)}">
+        <p>No posts yet. Publish something from the Halo Console to see it here.</p>
+      </div>
+    </div>
+  </th:block>
+</html>

@@ -1,0 +1,21 @@
+<!-- Site footer: configurable text + RSS link.
+
+     NOTE: the default footer line uses `th:with` to build the literal
+     outside of the SpEL expression. Putting `|© ${site.title}|` directly
+     inside `${... ?: (...)}` causes Thymeleaf to first expand the literal
+     substitution to the plain string `© My Site`, which SpEL then tries
+     to parse — and the resulting `©` character is not a valid SpEL token.
+-->
+<footer th:fragment="footer" class="site-footer">
+  <div class="container">
+    <p
+      th:with="defaultFooter = |© ${site.title}|"
+      th:text="${theme.config?.seo?.footer_text ?: defaultFooter}"
+    >Footer</p>
+    <div class="links" th:if="${theme.config?.seo?.show_rss}">
+      <a th:href="@{/rss.xml}">RSS</a>
+      <a th:href="@{/sitemap.xml}">Sitemap</a>
+      <a th:href="@{/archives}">Archives</a>
+    </div>
+  </div>
+</footer>

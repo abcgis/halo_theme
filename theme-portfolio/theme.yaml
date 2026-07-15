@@ -1,0 +1,34 @@
+apiVersion: theme.halo.run/v1alpha1
+kind: Theme
+metadata:
+  name: theme-portfolio
+spec:
+  displayName: Halo Portfolio Theme
+  author:
+    name: Halo Community
+    website: https://www.halo.run
+  description: |
+    A clean, responsive portfolio theme for showcasing projects, posts, and
+    personal work. Demonstrates the core features of Halo 2.x: Thymeleaf layout
+    reuse, Finder APIs, theme settings form, light/dark mode, pagination,
+    archives, categories, tags, custom post templates and error pages.
+  logo: /themes/theme-portfolio/assets/images/logo.svg
+  homepage: https://github.com/halo-sigs/theme-starter
+  repo: https://github.com/halo-sigs/theme-starter.git
+  issues: https://github.com/halo-sigs/theme-starter/issues
+  settingName: theme-portfolio-setting
+  configMapName: theme-portfolio-configmap
+  customTemplates:
+    post:
+      - name: Docs Layout
+        description: A two-column documentation layout with a sticky table of contents.
+        screenshot:
+        file: post-types/post-docs.html
+  version: 1.0.0
+  requires: ">=2.0.0"
+  license:
+    - name: "MIT"
+      url: "https://github.com/halo-sigs/theme-starter/blob/main/LICENSE"
+
+
+

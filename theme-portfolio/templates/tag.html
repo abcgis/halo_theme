@@ -1,0 +1,65 @@
+<!-- Tag detail: posts filtered by the current tag. -->
+<html xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout :: layout(title = |Tag: ${tag.spec.displayName} - ${site.title}|, content = ~{::content})}">
+  <th:block th:fragment="content">
+    <section class="page-header">
+      <div class="container">
+        <h1>
+          Tag: <span th:text="${tag.spec.displayName}">tag-name</span>
+        </h1>
+        <p>All posts tagged with <strong th:text="${tag.spec.displayName}">tag</strong>.</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <th:block th:if="${posts != null and not #lists.isEmpty(posts.items)}">
+        <ul class="post-list">
+          <li class="post-card" th:each="post : ${posts.items}">
+            <a
+              class="cover"
+              th:if="${post.spec.cover != null and not #strings.isEmpty(post.spec.cover)}"
+              th:href="@{${post.status.permalink}}"
+              tabindex="-1"
+            >
+              <img th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy" />
+            </a>
+            <div class="body">
+              <h3>
+                <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">Title</a>
+              </h3>
+              <p
+                class="excerpt"
+                th:if="${post.status.excerpt != null and not #strings.isEmpty(post.status.excerpt)}"
+                th:text="${post.status.excerpt}"
+              ></p>
+              <div class="meta">
+                <time th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <nav class="pagination" th:if="${posts.totalPages != null and posts.totalPages > 1}">
+          <a th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">&lsaquo; Prev</a>
+          <span th:unless="${posts.hasPrevious()}" class="disabled">&lsaquo; Prev</span>
+
+          <th:block th:each="p : ${#numbers.sequence(1, posts.totalPages)}">
+            <span th:if="${p == posts.page}" class="current" th:text="${p}">1</span>
+            <a
+              th:unless="${p == posts.page}"
+              th:href="@{|${tag.status.permalink}?page=${p}|}"
+              th:text="${p}"
+            >2</a>
+          </th:block>
+
+          <a th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">Next &rsaquo;</a>
+          <span th:unless="${posts.hasNext()}" class="disabled">Next &rsaquo;</span>
+        </nav>
+      </th:block>
+
+      <div class="empty" th:unless="${posts != null and not #lists.isEmpty(posts.items)}">
+        <p>No posts under this tag yet.</p>
+      </div>
+    </div>
+  </th:block>
+</html>
