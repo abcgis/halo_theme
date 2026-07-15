@@ -1,38 +1,30 @@
-
 apiVersion: theme.halo.run/v1alpha1
 kind: Theme
 metadata:
-  name: theme-cyanlin
-  labels:
-    name: theme-cyanlin
-    version: 1.0.1
+  name: theme-demo
 spec:
-  displayName: Cyanlin Portfolio
+  displayName: Halo Demo Theme
   author:
-    name: Cyan Lin Theme
-    website: https://www.cyanlin.com
+    name: Halo Community
+    website: https://www.halo.run
   description: |
-    A minimal, illustration / portfolio oriented Halo theme inspired by cyanlin.com.
-    Features: 3-column portfolio grid, single column detail page with image gallery,
-    fixed top navigation, mobile-first responsive layout.
-  logo: assets/logo.svg
-  website: https://github.com/your-repo/halo-theme-cyanlin
-  repo: https://github.com/your-repo/halo-theme-cyanlin
-  version: 1.0.1
-  require:
-    halo: ">=2.10.0"
-  settingName: theme-cyanlin-setting
+    A clean, responsive demo theme that showcases the core features of Halo 2.x:
+    Thymeleaf layout reuse, Finder APIs, theme settings form, light/dark mode,
+    pagination, archives, categories, tags, custom post templates and error pages.
+  logo: /themes/theme-demo/assets/images/logo.svg
+  homepage: https://github.com/halo-sigs/theme-starter
+  repo: https://github.com/halo-sigs/theme-starter.git
+  issues: https://github.com/halo-sigs/theme-starter/issues
+  settingName: theme-demo-setting
+  configMapName: theme-demo-configmap
   customTemplates:
-    portfolio:
-      name: Portfolio Detail
-      description: Single portfolio item layout (mirrors product_xxx.html).
-      screenshot: assets/templates/portfolio.png
-      file:
-        - portfolio.html.ftl
-    page_about:
-      name: About Layout
-      description: Two-column About layout (mirrors about.html).
-      screenshot: assets/templates/page-about.png
-      file:
-        - page_about.html.ftl
-
+    post:
+      - name: Docs Layout
+        description: A two-column documentation layout with a sticky table of contents.
+        screenshot:
+        file: post-types/post-docs.html
+  version: 1.0.0
+  requires: ">=2.0.0"
+  license:
+    - name: "MIT"
+      url: "https://github.com/halo-sigs/theme-starter/blob/main/LICENSE"

@@ -1,73 +1,62 @@
-apiVersion: theme.halo.run/v1alpha1
-kind: ThemeSetting
+apiVersion: v1alpha1
+kind: Setting
 metadata:
-  name: theme-cyanlin-setting
-  labels:
-    name: theme-cyanlin-setting
+  name: theme-demo-setting
 spec:
-  groupRef: theme-cyanlin
-  fields:
-    - name: site_subtitle
-      defaultValue: Portfolio
-      label: Site Subtitle
-      help: Small text shown to the right of (or under) the site title.
-      type: text
-    - name: primary_color
-      defaultValue: "#38bdf8"
-      label: Primary Color
-      help: Brand accent color used for buttons, links, and focus rings.
-      type: color
-    - name: logo_text
-      defaultValue: "CYAN LIN"
-      label: Logo Text
-      help: Text shown when no logo image is provided.
-      type: text
-    - name: logo_image
-      label: Logo Image URL (optional)
-      help: Leave empty to use Logo Text only.
-      type: text
-    - name: nav_left
-      label: Left Navigation Items
-      type: json
-      defaultValue: |-
-        [
-          {"label": "PORTFOLIO", "url": "/", "target": "_self"},
-          {"label": "BEHANCE",   "url": "https://www.behance.net/",   "target": "_blank"}
-        ]
-    - name: nav_right
-      label: Right Navigation Items
-      type: json
-      defaultValue: |-
-        [
-          {"label": "INSTAGRAM", "url": "https://www.instagram.com/", "target": "_blank"},
-          {"label": "ABOUT",     "url": "/about",                    "target": "_self"}
-        ]
-    - name: footer_text
-      label: Footer Text
-      type: textarea
-      defaultValue: "© Cyan Lin. All illustrations belong to the original author."
-    - name: social_links
-      label: Social Links
-      type: json
-      defaultValue: |-
-        [
-          {"label": "Behance",   "url": "https://www.behance.net/",   "icon": "behance"},
-          {"label": "Instagram", "url": "https://www.instagram.com/", "icon": "instagram"},
-          {"label": "Email",     "url": "mailto:you@example.com",     "icon": "email"}
-        ]
-    - name: enable_search
-      defaultValue: "true"
-      label: Show Search Box
-      type: bool
-    - name: enable_rss
-      defaultValue: "true"
-      label: Show RSS Link
-      type: bool
-    - name: items_per_page
-      defaultValue: "12"
-      label: Portfolio items per page
-      type: number
-    - name: enable_lightbox
-      defaultValue: "true"
-      label: Lightbox on Portfolio Detail
-      type: bool
+  forms:
+    - group: style
+      label: Style
+      formSchema:
+        - $formkit: radio
+          name: color_scheme
+          label: Default color scheme
+          value: system
+          options:
+            - label: Follow system
+              value: system
+            - label: Light
+              value: light
+            - label: Dark
+              value: dark
+        - $formkit: text
+          name: accent_color
+          label: Accent color (CSS color)
+          value: "#3b82f6"
+          help: Applied to links, buttons, and focus rings.
+    - group: layout
+      label: Layout
+      formSchema:
+        - $formkit: select
+          name: posts_per_page
+          label: Posts per page (index)
+          value: "10"
+          options:
+            - label: 6
+              value: "6"
+            - label: 10
+              value: "10"
+            - label: 20
+              value: "20"
+        - $formkit: switch
+          name: show_sidebar
+          label: Show sidebar on post pages
+          value: true
+          onValue: true
+          offValue: false
+    - group: seo
+      label: SEO & Footer
+      formSchema:
+        - $formkit: text
+          name: site_subtitle
+          label: Site subtitle (shown in header)
+          value: A Halo 2.x demo theme
+        - $formkit: textarea
+          name: footer_text
+          label: Footer text
+          value: "© Halo Demo Theme · Built with Halo 2.x"
+        - $formkit: switch
+          name: show_rss
+          label: Show RSS link in footer
+          value: true
+          onValue: true
+          offValue: false

@@ -1,0 +1,22 @@
+<!-- 404 error page. Variables: error.status, error.title, error.detail, error.instance, error.type -->
+<html xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout :: layout(title = 'Page not found', content = ~{::content})}">
+  <th:block th:fragment="content">
+    <section class="error-page">
+      <div>
+        <div class="code" th:text="${error.status ?: 404}">404</div>
+        <h1 th:text="${#strings.defaultString(error.title, 'Page not found')}">
+          Page not found
+        </h1>
+        <p
+          th:if="${not #strings.isEmpty(error.detail)}"
+          th:text="${error.detail}"
+        >The page you are looking for does not exist.</p>
+        <p
+          th:unless="${not #strings.isEmpty(error.detail)}"
+        >The page you are looking for does not exist or has been moved.</p>
+        <a class="btn" th:href="@{/}">Back to home</a>
+      </div>
+    </section>
+  </th:block>
+</html>

@@ -1,0 +1,19 @@
+<!-- Generic 4xx fallback (covers 401/403/405, etc.). Used when no exact match exists. -->
+<html xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout :: layout(title = 'Client error', content = ~{::content})}">
+  <th:block th:fragment="content">
+    <section class="error-page">
+      <div>
+        <div class="code" th:text="${error.status}">4xx</div>
+        <h1 th:text="${#strings.defaultString(error.title, 'Client error')}">
+          Client error
+        </h1>
+        <p
+          th:if="${not #strings.isEmpty(error.detail)}"
+          th:text="${error.detail}"
+        ></p>
+        <a class="btn" th:href="@{/}">Back to home</a>
+      </div>
+    </section>
+  </th:block>
+</html>

@@ -1,0 +1,35 @@
+<!-- Site header: brand on the left, primary menu + theme toggle on the right. -->
+<header th:fragment="header" class="site-header">
+  <div class="container">
+    <a class="site-brand" th:href="@{/}">
+      <img
+        th:if="${site.logo != null and not #strings.isEmpty(site.logo)}"
+        th:src="${site.logo}"
+        alt=""
+      />
+      <span th:text="${site.title}">Site Title</span>
+      <span
+        class="subtitle"
+        th:if="${theme.config.seo?.site_subtitle != null and not #strings.isEmpty(theme.config.seo.site_subtitle)}"
+        th:text="|— ${theme.config.seo.site_subtitle}|"
+      ></span>
+    </a>
+
+    <nav class="site-nav" th:with="primary = ${menuFinder.getPrimary()}">
+      <a
+        th:each="item : ${primary.menuItems}"
+        th:href="@{${item.status.href}}"
+        th:text="${item.status.displayName}"
+        th:target="${item.spec.target?.value}"
+      ></a>
+
+      <button
+        type="button"
+        class="theme-toggle"
+        data-theme-toggle
+        aria-label="Toggle color scheme"
+        title="Toggle color scheme"
+      >◐</button>
+    </nav>
+  </div>
+</header>

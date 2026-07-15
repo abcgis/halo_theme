@@ -1,193 +1,138 @@
-# Halo Theme · Cyanlin Portfolio
+# Halo Demo Theme
 
-> A minimal, illustration / portfolio oriented Halo 2.x theme inspired by
-> [http://www.cyanlin.com/](http://www.cyanlin.com/) — the personal site of
-> illustrator **Cyan Lin**.
+A clean, responsive **Halo 2.x** demo theme that showcases the core capabilities
+every theme author needs to know about.
 
-This theme re-implements the original site's signature three-column layout
-with hover-to-zoom thumbnails, sticky 3-zone navigation and a quiet editorial
-type system, then bolts it on top of Halo so you get a normal blog / CMS
-underneath.
-
-![preview](preview.png)
+> Built following the official Halo developer guide
+> ([docs.halo.run/developer-guide/theme/prepare](https://docs.halo.run/developer-guide/theme/prepare))
+> and the [`halo-theme-dev`](../halo-theme-dev) AI assistant skill.
 
 ---
 
-## 1.  What's included
+## Features
+
+| Area | What is demonstrated |
+| ---- | ------------------- |
+| **Layout reuse** | `templates/layout.html` is a parameterized Thymeleaf fragment (`layout(title, content)`) that every page template reuses via `th:replace`. |
+| **Static assets** | CSS / JS / images live under `templates/assets/`, referenced with cache-busting `?v={theme.spec.version}`. |
+| **Theme settings form** | `settings.yaml` (FormKit) exposes style / layout / SEO groups; values are read via `theme.config.<group>.<field>`. |
+| **Global variables** | `site`, `theme`, `theme.config`, `#theme.assets()` — see `layout.html`, `header.html`, `index.html`. |
+| **Finder APIs** | `menuFinder.getPrimary()`, `postFinder.cursor()`, `postFinder.listAll()`, `tagFinder.listAll()`. |
+| **Pagination** | Built for `posts`, `archives`, `tag`, `category`, `author` using `prevUrl` / `nextUrl` / `hasPrevious()` / `hasNext()`. |
+| **Custom templates** | `theme.yaml` registers a **Docs Layout** for posts; the file lives at `templates/post-types/post-docs.html`. |
+| **Light / dark mode** | Toggle in the header; persisted in `localStorage`; system preference respected when no override is set. |
+| **Comment extension** | `<halo:comment>` rendered conditionally on `post.html` and `page.html` via `haloCommentEnabled`. |
+| **Footer injection** | `<halo:footer />` is the last body element in `layout.html` so plugins can inject analytics. |
+| **Error pages** | `templates/error/404.html` and `4xx.html` (per the Halo error-template resolution order). |
+| **i18n-friendly** | All text is in plain HTML / Thymeleaf — no hard-coded copy beyond footer placeholder. |
+| **Safe Thymeleaf** | Uses `?.`, `?:`, `#strings.isEmpty`, literal substitutions, `@{${url}}` for permalinks. |
+
+---
+
+## Directory layout
 
 ```
-halo-theme-cyanlin/
-├── theme.yaml            # Manifest
-├── settings.yaml         # Theme settings schema
+halo-theme-demo/
+├── theme.yaml                          # Theme manifest
+├── settings.yaml                       # Settings form (FormKit)
 ├── README.md
-├── preview.png           # Static screenshot (replace manually)
-├── templates/
-│   ├── index.html.ftl         # Portfolio grid homepage   (≈ cyanlin.com/index.html)
-│   ├── post.html.ftl          # Standard blog post
-│   ├── portfolio.html.ftl     # Portfolio-item detail      (≈ product_xxx.html)
-│   ├── page.html.ftl          # Page (single col + custom 2-col about variant)
-│   ├── archives.html.ftl
-│   ├── categories.html.ftl
-│   ├── tags.html.ftl
-│   ├── search.html.ftl
-│   ├── friendlinks.html.ftl
-│   ├── moment.html.ftl        # Short updates timeline
-│   ├── 404.html.ftl
-│   ├── sitemap.xml.ftl
-│   ├── module/
-│   │   ├── layout.html.ftl
-│   │   ├── header.html.ftl    # Desktop 3-zone header
-│   │   ├── mobile-header.html.ftl
-│   │   └── footer.html.ftl
-│   └── widget/
-│       ├── blog_recent.html.ftl
-│       ├── blog_list.html.ftl
-│       ├── category_list.html.ftl
-│       ├── tag_list.html.ftl
-│       ├── profile.html.ftl
-│       ├── search.html.ftl
-│       ├── archives.html.ftl
-│       └── social_clients.html.ftl   # "Lucky to have worked with"
-├── static/
-│   ├── css/theme.css
-│   ├── js/theme.js
-│   └── images/logo.svg
+└── templates/
+    ├── layout.html                     # Parameterized layout fragment
+    ├── index.html                      # Home (post list grid)
+    ├── post.html                       # Post detail (default template)
+    ├── page.html                       # Single page detail
+    ├── archives.html                   # Year/month archive
+    ├── tags.html                       # All tags
+    ├── tag.html                        # Posts for one tag
+    ├── categories.html                 # All categories
+    ├── category.html                   # Posts for one category
+    ├── author.html                     # Author profile + posts
+    ├── assets/
+    │   ├── css/style.css               # Theme stylesheet (light/dark tokens)
+    │   ├── js/main.js                  # Theme toggle + localStorage
+    │   └── images/logo.svg
+    ├── modules/
+    │   ├── header.html                 # Site header fragment
+    │   └── footer.html                 # Site footer fragment
+    ├── error/
+    │   ├── 404.html                    # Not found
+    │   └── 4xx.html                    # Generic client error fallback
+    └── post-types/
+        └── post-docs.html              # Custom "Docs Layout" variant
 ```
 
 ---
 
-## 2.  Installation
+## Installation
 
-1. Package the folder: `zip -r halo-theme-cyanlin.zip halo-theme-cyanlin/`
-2. Halo 2.x admin → **Appearance → Themes → Install** → upload the zip.
-3. Activate the theme, then fill in the settings (logo, navigation, primary color).
+1. Make sure your local folder name matches `metadata.name` in `theme.yaml`
+   (`theme-demo`). When installing, Halo extracts the theme under its
+   `themes/` directory using that exact folder name.
+2. Open the Halo Console → **Appearance → Themes**.
+3. Click **Switch theme → Not installed**, then **Install** the theme.
+4. Click **Enable** on the newly installed theme.
+5. (Optional) Open **Theme settings** to adjust accent color, layout and footer.
+6. Visit the frontend (default `http://localhost:8090`) to verify.
 
----
+### Hot-reload during development
 
-## 3.  Page templates
+- **Source mode** — add to `application.yml`:
+  ```yaml
+  spring:
+    thymeleaf:
+      cache: false
+  ```
+- **Docker** — add the environment variable `SPRING_THYMELEAF_CACHE=false`.
 
-The theme registers three **custom templates** you can assign per Post/Page:
-
-| Template name           | Use it for                                | Mirrors                       |
-|-------------------------|-------------------------------------------|-------------------------------|
-| `portfolio`             | A single portfolio item (cover + gallery) | `product_xxx.html`            |
-| `page_about`            | About page (two-column bio)               | `about.html`                  |
-| `page_portfolio_grid`   | Category / tag landing page               | (uses the same grid as index) |
-
-To assign in Halo: edit the post → **Advanced → Template → Portfolio Detail**.
-
----
-
-## 4.  Replicating the original site
-
-### 4.1 Portfolio grid (homepage)
-
-The homepage (`index.html.ftl`) shows the latest posts as a 3-column grid with
-hover-zoom. To match cyanlin.com exactly:
-
-* Use square cover images.
-* Set each Post's **Category** to one of `PORTFOLIO`, `BOOK PROJECT`, `EDITORIAL`,
-  `PERSONAL`, `FESTIVAL`, `DIARY` (these mirror the original navigation).
-
-### 4.2 Portfolio detail (≈ product_xxx.html)
-
-Use template `portfolio`. Inside the post body, drop images like:
-
-```md
-![Caption 1](https://cdn.example.com/work-1.jpg)
-
-![Caption 2](https://cdn.example.com/work-2.jpg)
-```
-
-The template auto-extracts every `<img>` and renders a stacked gallery with
-optional lightbox (toggle via `enable_lightbox` setting).
-
-### 4.3 About page (≈ about.html)
-
-Create a new **Page**, assign template `page_about`, and paste Markdown like:
-
-```md
-## Education
-- **MA Illustration** — Art University of Bournemouth 2019-2020
-- **BA Relief Printmaking** — China Academy of Art 2015-2019
-
-## Contact
-Email: you@email.com
-Instagram: @your_handle
-```
-
-Columns are automatically picked up by the `about-grid` style.
-
-### 4.4 "Lucky to have worked with…"
-
-Add a widget `social_clients` to the about page side-bar with:
-
-* Title: `Lucky to have worked with :`
-* List: `Aquila, China Post, Duzhe, Funshow Art, HERZ …`  (comma-separated)
+After editing `theme.yaml`, click **Reload theme configuration** on the theme
+page in Console for changes to take effect.
 
 ---
 
-## 5.  Theme settings (UI in admin)
+## Settings reference
 
-| Setting               | Type    | Default            | Notes                                              |
-|-----------------------|---------|--------------------|----------------------------------------------------|
-| `logo_text`           | text    | `CYAN LIN`         | Used when no logo image is supplied                |
-| `logo_image`          | text    | empty              | Full URL of PNG/SVG logo                           |
-| `site_subtitle`       | text    | `Portfolio`        | Shown next to logo                                 |
-| `primary_color`       | color   | `#38bdf8`          | Accent color                                       |
-| `nav_left`            | json    | `PORTFOLIO`, `BEHANCE`  | Editable as JSON in the settings UI           |
-| `nav_right`           | json    | `INSTAGRAM`, `ABOUT`    | Editable as JSON                             |
-| `social_links`        | json    | 3 default entries  | Icon + URL pairs                                   |
-| `footer_text`         | text    |                    | Bottom-of-page copyright                           |
-| `items_per_page`      | number  | 12                 | Used in pagination                                 |
-| `enable_search`       | bool    | true               | Show search box in mobile drawer                   |
-| `enable_rss`          | bool    | true               | Inject RSS link                                    |
-| `enable_lightbox`     | bool    | true               | Lightbox on portfolio detail page                  |
+All settings live in three groups defined in `settings.yaml`:
 
----
+| Group   | Field             | Type      | Default              | Effect                                       |
+| ------- | ----------------- | --------- | -------------------- | -------------------------------------------- |
+| style   | `color_scheme`    | radio     | `system`             | Initial light/dark choice (overridable)      |
+| style   | `accent_color`    | text      | `#3b82f6`            | CSS variable `--color-accent`                 |
+| layout  | `posts_per_page`  | select    | `10`                 | Informational — used in theme notes          |
+| layout  | `show_sidebar`    | switch    | `true`               | Adds the right sidebar on `post.html`        |
+| seo     | `site_subtitle`   | text      | `A Halo 2.x demo theme` | Shown next to the site title in the header |
+| seo     | `footer_text`     | textarea  | `© Halo Demo Theme …` | Replaces the default footer copyright line   |
+| seo     | `show_rss`        | switch    | `true`               | Toggles RSS / Sitemap / Archives footer row  |
 
-## 6.  Customising colors
-
-Override the CSS variables in `static/css/theme.css`:
-
-```css
-:root {
-  --color-primary: #a371f7;     /* accent        */
-  --color-text:    #1a1a1a;
-  --color-line:    #ededed;
-  --max-width:     1200px;      /* site width    */
-  --logo-height:   80px;
-}
-```
+> `posts_per_page` is informational — the actual page size is set per-route in
+> **System settings → Posts/Archives/Tags/Categories** in Console.
 
 ---
 
-## 7.  JavaScript
+## Adding a new template
 
-`theme.js` is dependency-free vanilla JS and provides:
+1. Drop a new `templates/foo.html` file. Use `th:replace="~{layout :: layout(title = ..., content = ~{::content})}"` at the root and wrap content in `<th:block th:fragment="content">…</th:block>`.
+2. Reference static assets via `th:href="@{/assets/...}"` (path is relative to `templates/assets/`).
+3. Reinstall the theme in Console if you change `theme.yaml`.
 
-* `.mobile-menu-toggle` drawer
-* Sticky-header shadow on scroll
-* Lightbox (Escape / ArrowLeft / ArrowRight)
-* Back-to-top button
+For a new post layout variant:
 
-Disable any of these by removing the body attribute or `data-lightbox="false"`.
+1. Create `templates/post-types/<name>.html`.
+2. Register it in `theme.yaml`:
+   ```yaml
+   spec:
+     customTemplates:
+       post:
+         - name: My Layout
+           file: post-types/<name>.html
+   ```
+3. Click **Reload theme configuration** in Console.
 
 ---
 
-## 8.  Compatibility
+## References
 
-* Tested against Halo `2.10+` (uses Freemarker directives and the standard
-  theme extension contract).
-* Works with the official search plugin, the comment plugin, and the
-  moment plugin out of the box.
-
----
-
-## 9.  Credits
-
-* Original design: **Cyan Lin** ([@cyan_cha](https://www.instagram.com/cyan_cha/))
-* Halo port: *this theme*
-
-This project is not affiliated with cyanlin.com; it is an independent port
-made for educational purposes, with the layout reproduced as original.
+- Halo developer guide — [Theme preparation](https://docs.halo.run/developer-guide/theme/prepare)
+- Halo developer guide — [Template variables](https://docs.halo.run/developer-guide/theme/template-variables)
+- Halo developer guide — [Finder APIs](https://docs.halo.run/developer-guide/theme/finder-apis)
+- Halo developer guide — [Form schema](https://docs.halo.run/developer-guide/form-schema)
+- `halo-theme-dev` skill — `references/` (bundled with this repo)
