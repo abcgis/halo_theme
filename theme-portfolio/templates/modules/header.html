@@ -1,5 +1,9 @@
-<!-- Site header: brand on the left, primary menu + theme toggle on the right. -->
-<header th:fragment="header" class="site-header">
+<!--
+  Site header — fixed, transparent → solid on scroll.
+  Mobile: hamburger opens a full-viewport overlay nav.
+  Active link underline animates with scaleX (origin: 0).
+-->
+<header th:fragment="header" class="site-header" data-site-header>
   <div class="container">
     <a class="site-brand" th:href="@{/}">
       <img
@@ -11,7 +15,7 @@
       <span
         class="subtitle"
         th:if="${theme.config.seo?.site_subtitle != null and not #strings.isEmpty(theme.config.seo.site_subtitle)}"
-        th:text="|— ${theme.config.seo.site_subtitle}|"
+        th:text="${theme.config.seo.site_subtitle}"
       ></span>
     </a>
 
@@ -19,13 +23,15 @@
       Defensive: menuFinder.getPrimary() can return null on fresh installs
       where no menu has been configured yet. Guard against NPE.
     -->
-    <nav class="site-nav" th:with="primary = ${menuFinder.getPrimary()}">
+    <nav class="site-nav" data-site-nav th:with="primary = ${menuFinder.getPrimary()}">
       <th:block th:if="${primary != null and not #lists.isEmpty(primary.menuItems)}">
         <a
+          class="nav-link"
           th:each="item : ${primary.menuItems}"
           th:href="@{${item.status.href}}"
           th:text="${item.status.displayName}"
           th:target="${item.spec.target?.value}"
+          th:attrappend="data-nav-link=${item.status.href}"
         ></a>
       </th:block>
 
@@ -35,7 +41,40 @@
         data-theme-toggle
         aria-label="Toggle color scheme"
         title="Toggle color scheme"
-      >&#9680;</button>
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        class="theme-toggle theme-toggle-mobile"
+        data-theme-toggle
+        aria-label="Toggle color scheme"
+        title="Toggle color scheme"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+      </button>
     </nav>
+
+    <button
+      type="button"
+      class="menu-toggle"
+      data-menu-toggle
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="site-nav"
+    >
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
   </div>
 </header>

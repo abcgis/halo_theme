@@ -10,7 +10,8 @@ spec:
         - $formkit: radio
           name: color_scheme
           label: Default color scheme
-          value: system
+          value: light
+          help: Light mode is the default. Choose dark or follow the system.
           options:
             - label: Follow system
               value: system
@@ -21,44 +22,47 @@ spec:
         - $formkit: text
           name: accent_color
           label: Accent color (CSS color)
-          value: "#3b82f6"
-          help: Applied to links, buttons, and focus rings.
+          value: "#f7b731"
+          help: Used for active nav underline, button hover, and links.
     - group: layout
       label: Layout
       formSchema:
         - $formkit: select
           name: posts_per_page
           label: Posts per page (index)
-          value: "10"
+          value: "6"
           options:
             - label: 6
               value: "6"
-            - label: 10
-              value: "10"
-            - label: 20
-              value: "20"
+            - label: 12
+              value: "12"
+            - label: 24
+              value: "24"
         - $formkit: switch
           name: show_sidebar
           label: Show sidebar on post pages
-          value: true
+          value: false
           onValue: true
           offValue: false
     - group: seo
-      label: SEO & Footer
+      label: Identity & Footer
       formSchema:
         - $formkit: text
           name: site_subtitle
           label: Site subtitle (shown in header)
-          value: A Halo 2.x demo theme
+          value: Selected work & notes
+        - $formkit: text
+          name: hero_title
+          label: Hero title (homepage)
+          value: ""
+          help: Leave empty to use the site title.
         - $formkit: textarea
           name: footer_text
           label: Footer text
-          value: "© Halo Demo Theme · Built with Halo 2.x"
+          value: "© 2026. All rights reserved."
         - $formkit: switch
           name: show_rss
           label: Show RSS link in footer
           value: true
           onValue: true
           offValue: false
-
-

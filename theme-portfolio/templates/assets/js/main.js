@@ -1,43 +1,129 @@
 /**
- * Halo Demo Theme — main.js
- * Handles theme (color scheme) switching with localStorage persistence.
- * Reads the initial scheme from <html data-theme> set by the layout template.
+ * Halo Portfolio Theme - main.js
+ *
+ * Responsibilities:
+ *   1. Color-scheme cycling (system / light / dark) with localStorage persistence.
+ *   2. Header scroll state - toggles data-scrolled="true" when the page
+ *      is scrolled past the header height, so the background fades in.
+ *   3. Mobile menu toggle - flips aria-expanded and the nav overlay state.
+ *   4. Active-link highlighting - marks the current nav link based on URL path.
+ *   5. Scroll-reveal observer - adds .is-visible to any [data-reveal] element
+ *      that enters the viewport, for fade-up animation.
+ *
+ * No external dependencies.
  */
 (function () {
   "use strict";
 
-  var STORAGE_KEY = "halo-demo-theme";
+  // ============================================================
+  // 1. Color scheme
+  // ============================================================
+  var STORAGE_KEY = "halo-portfolio-theme";
   var html = document.documentElement;
 
-  function apply(scheme) {
-    // scheme: "light" | "dark" | "system"
-    html.setAttribute("data-theme", scheme);
-  }
-
-  function current() {
+  function currentScheme() {
     return html.getAttribute("data-theme") || "system";
   }
+  function applyScheme(scheme) {
+    html.setAttribute("data-theme", scheme);
+  }
+  function cycleScheme() {
+    var order = ["system", "light", "dark"];
+    var next = order[(order.indexOf(currentScheme()) + 1) % order.length];
+    applyScheme(next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (_) {}
+    updateToggleLabels();
+  }
+  function updateToggleLabels() {
+    var label = "Color scheme: " + currentScheme() + " (click to cycle)";
+    document.querySelectorAll("[data-theme-toggle]").forEach(function (btn) {
+      btn.setAttribute("title", label);
+      btn.setAttribute("aria-label", label);
+    });
+  }
 
-  // Persist override on click of the toggle button.
   document.addEventListener("click", function (e) {
     var btn = e.target.closest("[data-theme-toggle]");
-    if (!btn) return;
-    var order = ["system", "light", "dark"];
-    var next = order[(order.indexOf(current()) + 1) % order.length];
-    apply(next);
-    try { localStorage.setItem(STORAGE_KEY, next); } catch (_) {}
+    if (btn) cycleScheme();
   });
 
-  // Restore user override before paint if present.
+  // Restore user override before paint, if present
   try {
     var saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) apply(saved);
+    if (saved) applyScheme(saved);
+  } catch (_) {}
+  updateToggleLabels();
+
+  // ============================================================
+  // 2. Header scroll state
+  // ============================================================
+  var header = document.querySelector("[data-site-header]");
+  if (header) {
+    var SCROLL_THRESHOLD = 24;
+    function syncHeader() {
+      var scrolled = window.scrollY > SCROLL_THRESHOLD;
+      header.setAttribute("data-scrolled", scrolled ? "true" : "false");
+    }
+    syncHeader();
+    window.addEventListener("scroll", syncHeader, { passive: true });
+  }
+
+  // ============================================================
+  // 3. Mobile menu toggle
+  // ============================================================
+  var menuToggle = document.querySelector("[data-menu-toggle]");
+  var siteNav = document.querySelector("[data-site-nav]");
+  if (menuToggle && siteNav) {
+    menuToggle.addEventListener("click", function () {
+      var open = menuToggle.getAttribute("aria-expanded") === "true";
+      menuToggle.setAttribute("aria-expanded", open ? "false" : "true");
+      siteNav.setAttribute("data-open", open ? "false" : "true");
+    });
+    // Close menu when a link is tapped
+    siteNav.addEventListener("click", function (e) {
+      if (e.target.closest("a") && window.matchMedia("(max-width: 768px)").matches) {
+        menuToggle.setAttribute("aria-expanded", "false");
+        siteNav.setAttribute("data-open", "false");
+      }
+    });
+  }
+
+  // ============================================================
+  // 4. Active-link highlighting based on path
+  // ============================================================
+  try {
+    var path = window.location.pathname.replace(/\/+$/, "") || "/";
+    var links = document.querySelectorAll("[data-nav-link]");
+    links.forEach(function (a) {
+      var href = a.getAttribute("data-nav-link") || a.getAttribute("href") || "";
+      var normalized = href.replace(/\/+$/, "") || "/";
+      if (normalized === path || (path === "/" && normalized === "/")) {
+        a.classList.add("active");
+        a.setAttribute("aria-current", "page");
+      }
+    });
   } catch (_) {}
 
-  // Friendly label on the toggle button.
-  var btn = document.querySelector("[data-theme-toggle]");
-  if (btn) {
-    btn.setAttribute("title", "Color scheme: " + current() + " (click to cycle)");
-    btn.setAttribute("aria-label", "Toggle color scheme");
+  // ============================================================
+  // 5. Scroll-reveal observer
+  // ============================================================
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.05 });
+
+    document.querySelectorAll("[data-reveal]").forEach(function (el) {
+      io.observe(el);
+    });
+  } else {
+    // No IntersectionObserver - just show everything
+    document.querySelectorAll("[data-reveal]").forEach(function (el) {
+      el.classList.add("is-visible");
+    });
   }
 })();

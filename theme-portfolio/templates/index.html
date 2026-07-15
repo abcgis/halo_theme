@@ -1,21 +1,41 @@
-<!-- Home page: latest posts in a card grid. -->
+<!--
+  Home page — hero (full-viewport display) + portfolio grid below.
+  Eyebrow / title / subtitle / actions all fadeUp on load (CSS animation).
+-->
 <html xmlns:th="https://www.thymeleaf.org"
       th:replace="~{layout :: layout(title = ${site.title}, content = ~{::content})}">
   <th:block th:fragment="content">
-    <section class="page-header">
-      <div class="container">
-        <h1 th:text="${site.title}">Site Title</h1>
-        <p
-          th:if="${site.subtitle != null and not #strings.isEmpty(site.subtitle)}"
-          th:text="${site.subtitle}"
-        ></p>
+    <section class="hero" aria-label="Introduction">
+      <span class="eyebrow">Welcome</span>
+      <h1 class="title" th:text="${site.title}">Site Title</h1>
+      <p
+        class="subtitle"
+        th:if="${site.subtitle != null and not #strings.isEmpty(site.subtitle)}"
+        th:text="${site.subtitle}"
+      >A line about the work.</p>
+      <p
+        class="subtitle"
+        th:unless="${site.subtitle != null and not #strings.isEmpty(site.subtitle)}"
+      >Selected work, notes, and experiments.</p>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="#work">View Work</a>
       </div>
     </section>
 
-    <div class="container">
+    <hr class="divider" />
+
+    <section class="section container" id="work" aria-label="Latest work">
+      <p class="section-title">Selected</p>
+      <h2 class="section-heading">Latest</h2>
+      <p class="section-intro">
+        A small selection of recent posts. Click any card to read in full.
+      </p>
+
       <th:block th:if="${posts != null and not #lists.isEmpty(posts.items)}">
-        <ul class="post-list">
-          <li class="post-card" th:each="post : ${posts.items}">
+        <ul class="post-grid">
+          <li class="post-card" th:each="post, iter : ${posts.items}"
+              th:attrappend="style=|animation-delay: ${0.05 * iter.index}s|">
             <a
               class="cover"
               th:if="${post.spec.cover != null and not #strings.isEmpty(post.spec.cover)}"
@@ -54,7 +74,7 @@
         </ul>
 
         <!-- Pagination -->
-        <nav class="pagination" th:if="${posts.totalPages != null and posts.totalPages > 1}">
+        <nav class="pagination" th:if="${posts.totalPages != null and posts.totalPages > 1}" aria-label="Pagination">
           <a
             th:if="${posts.hasPrevious()}"
             th:href="@{${posts.prevUrl}}"
@@ -81,8 +101,10 @@
       </th:block>
 
       <div class="empty" th:unless="${posts != null and not #lists.isEmpty(posts.items)}">
-        <p>No posts yet. Publish something from the Halo Console to see it here.</p>
+        <p style="text-align:center; color: var(--color-fg-muted); padding: 48px 0;">
+          No posts yet. Publish something from the Halo Console to see it here.
+        </p>
       </div>
-    </div>
+    </section>
   </th:block>
 </html>

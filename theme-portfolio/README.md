@@ -133,6 +133,37 @@ For a new post layout variant:
 
 ---
 
+
+---
+
+## Design system
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| Background | `#fafafa` | `#0d0d0d` |
+| Surface | `#ffffff` | `#171717` |
+| Foreground | `#171717` | `#fafafa` |
+| Muted text | `#737373` | `#a1a1a1` |
+| Border | `#e6e6e6` | `#262626` |
+| Accent | `#f7b731` (gold) | `#f7b731` (gold) |
+| On-accent text | `#0d0d0d` | `#0d0d0d` |
+| Footer bg | `#1a1a1a` | `#0a0a0a` |
+
+**Type**: single face — **Montserrat** (300/400/500/600/700/800), loaded from
+Google Fonts with system fallbacks. Display titles use 700-800 + tight
+letter-spacing; body copy is 400 at 1.6 line-height.
+
+**Motion**: every transition is 200–300 ms `cubic-bezier(0.4, 0, 0.2, 1)`.
+Hero content fades up in sequence (eyebrow -> title -> subtitle -> CTA),
+the nav underline animates with `scaleX` from the left, and any element
+with `[data-reveal]` fades up when it scrolls into view. Honors
+`prefers-reduced-motion`.
+
+**Header**: fixed, transparent by default, gains a translucent background
+with backdrop-blur after 24px of scroll.
+
+**Mobile**: nav collapses into a hamburger that opens a full-viewport
+overlay (translateX transition). Hamburger bars animate into an X.
 ## Pitfalls and lessons learned
 
 Hard-won fixes for issues that don't show up in the official docs.
