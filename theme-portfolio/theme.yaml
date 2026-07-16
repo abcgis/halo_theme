@@ -3,9 +3,9 @@ kind: Theme
 metadata:
   name: theme-portfolio
 spec:
-  displayName: Halo Portfolio Theme
+  displayName: Theme Portfolio
   author:
-    name: Halo Community
+    name: ABCGIS
     website: https://www.halo.run
   description: |
     A clean, responsive portfolio theme for showcasing projects, posts, and
@@ -13,9 +13,9 @@ spec:
     reuse, Finder APIs, theme settings form, light/dark mode, pagination,
     archives, categories, tags, custom post templates and error pages.
   logo: /themes/theme-portfolio/assets/images/logo.svg
-  homepage: https://github.com/halo-sigs/theme-starter
-  repo: https://github.com/halo-sigs/theme-starter.git
-  issues: https://github.com/halo-sigs/theme-starter/issues
+  homepage: https://github.com/abcgis/halo_theme
+  repo: https://github.com/abcgis/halo_theme.git
+  issues: https://github.com/abcgis/halo_theme/issues
   settingName: theme-portfolio-setting
   configMapName: theme-portfolio-configmap
   customTemplates:
@@ -27,8 +27,8 @@ spec:
   version: 1.0.0
   requires: ">=2.0.0"
   license:
-    - name: "MIT"
-      url: "https://github.com/halo-sigs/theme-starter/blob/main/LICENSE"
+    - name: "Apache-2.0 license"
+      url: "https://github.com/abcgis/halo_theme/blob/main/LICENSE"
 
 
 
