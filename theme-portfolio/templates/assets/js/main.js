@@ -1,5 +1,5 @@
 /**
- * Halo Portfolio Theme - main.js
+ * Theme Portfolio - main.js
  *
  * Responsibilities:
  *   1. Color-scheme cycling (system / light / dark) with localStorage persistence.
@@ -9,6 +9,8 @@
  *   4. Active-link highlighting - marks the current nav link based on URL path.
  *   5. Scroll-reveal observer - adds .is-visible to any [data-reveal] element
  *      that enters the viewport, for fade-up animation.
+ *   6. AOS-style animation observer - adds .aos-animate to [data-aos] elements
+ *      when they enter the viewport, with support for data-aos-delay.
  *
  * No external dependencies.
  */
@@ -22,7 +24,7 @@
   var html = document.documentElement;
 
   function currentScheme() {
-    return html.getAttribute("data-theme") || "system";
+    return html.getAttribute("data-theme") || "dark";
   }
   function applyScheme(scheme) {
     html.setAttribute("data-theme", scheme);
@@ -105,7 +107,7 @@
   } catch (_) {}
 
   // ============================================================
-  // 5. Scroll-reveal observer
+  // 5. Scroll-reveal observer (legacy [data-reveal])
   // ============================================================
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (entries) {
@@ -121,9 +123,38 @@
       io.observe(el);
     });
   } else {
-    // No IntersectionObserver - just show everything
     document.querySelectorAll("[data-reveal]").forEach(function (el) {
       el.classList.add("is-visible");
+    });
+  }
+
+  // ============================================================
+  // 6. AOS-style animation observer ([data-aos])
+  // ============================================================
+  if ("IntersectionObserver" in window) {
+    var aosObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var el = entry.target;
+          var delay = parseInt(el.getAttribute("data-aos-delay") || "0", 10);
+          if (delay > 0) {
+            setTimeout(function () {
+              el.classList.add("aos-animate");
+            }, delay);
+          } else {
+            el.classList.add("aos-animate");
+          }
+          aosObserver.unobserve(el);
+        }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+
+    document.querySelectorAll("[data-aos]").forEach(function (el) {
+      aosObserver.observe(el);
+    });
+  } else {
+    document.querySelectorAll("[data-aos]").forEach(function (el) {
+      el.classList.add("aos-animate");
     });
   }
 })();

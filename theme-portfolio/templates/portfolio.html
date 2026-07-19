@@ -1,0 +1,49 @@
+<!--
+  Portfolio Grid — custom page template for showcasing categories/galleries.
+  To use: create a page in Halo Console and select "Portfolio Grid" template.
+  Each category with a cover image becomes a square grid item.
+-->
+<html xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout :: layout(title = |作品集 - ${site.title}|, content = ~{::content})}">
+  <th:block th:fragment="content">
+    <section class="page-header">
+      <div class="container">
+        <h1>作品集</h1>
+        <p>按分类浏览作品集。</p>
+      </div>
+    </section>
+
+    <div class="container" style="padding-bottom: 96px;">
+      <th:block th:if="${categories != null and not #lists.isEmpty(categories.items)}">
+        <ul class="portfolio-grid">
+          <li
+            class="portfolio-item"
+            th:each="cat, iter : ${categories.items}"
+            data-aos="fade-up"
+            th:attr="data-aos-delay=${(iter.index % 3) * 100}"
+          >
+            <a th:href="@{${cat.status.permalink}}" style="display: block; width: 100%; height: 100%;">
+              <img
+                th:if="${cat.spec.cover != null and not #strings.isEmpty(cat.spec.cover)}"
+                th:src="${cat.spec.cover}"
+                th:alt="${cat.spec.displayName}"
+                loading="lazy"
+              />
+              <div class="overlay">
+                <h3 class="overlay-title" th:text="${cat.spec.displayName}">分类</h3>
+                <span
+                  style="font-size: 0.8rem; color: var(--color-fg-muted); margin-top: 8px; text-transform: uppercase; letter-spacing: 1px;"
+                  th:text="|${cat.postCount ?: 0} 作品|"
+                >0 作品</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </th:block>
+
+      <div class="empty" th:unless="${categories != null and not #lists.isEmpty(categories.items)}">
+        <p>暂无分类。在 Halo 后台创建分类并设置封面图即可在此显示。</p>
+      </div>
+    </div>
+  </th:block>
+</html>

@@ -1,16 +1,45 @@
-<!-- Single page detail (e.g. About, Links). Lighter than post.html — no prev/next or sidebar. -->
+<!--
+  Single page detail (e.g. About, Contact).
+  Adds gold accent title, centered layout, and contact form styling
+  when the page slug hints at a contact page.
+-->
 <html xmlns:th="https://www.thymeleaf.org"
       th:replace="~{layout :: layout(title = |${singlePage.spec.title} - ${site.title}|, content = ~{::content})}">
   <th:block th:fragment="content">
     <div class="container">
       <article class="article">
         <header class="article-header">
-          <h1 th:text="${singlePage.spec.title}">Page Title</h1>
+          <h1
+            th:text="${singlePage.spec.title}"
+            th:classappend="${singlePage.spec.slug == 'about' or singlePage.spec.slug == 'contact'} ? 'gold-heading' : ''"
+          >Page Title</h1>
         </header>
 
         <div class="article-content" th:utext="${singlePage.content.content}">
           Page content goes here.
         </div>
+
+        <!-- Simple contact form enhancement — only renders on a page whose slug contains "contact" -->
+        <form
+          th:if="${singlePage.spec.slug != null and #strings.contains(#strings.toLowerCase(singlePage.spec.slug), 'contact')}"
+          class="contact-form"
+          style="margin-top: 48px;"
+          onsubmit="event.preventDefault(); alert('感谢您的留言！这是演示表单 — 集成后端后可接收消息。');"
+        >
+          <div class="form-group">
+            <label for="cf-name">您的姓名</label>
+            <input type="text" id="cf-name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="cf-email">您的邮箱</label>
+            <input type="email" id="cf-email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="cf-message">留言内容</label>
+            <textarea id="cf-message" name="message" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">发送</button>
+        </form>
       </article>
 
       <div th:if="${haloCommentEnabled}">

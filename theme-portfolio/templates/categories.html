@@ -11,8 +11,8 @@
 
     <div class="container">
       <th:block th:if="${categories != null and not #lists.isEmpty(categories.items)}">
-        <ul class="post-list" style="list-style:none;">
-          <li class="post-card" th:each="cat : ${categories.items}">
+        <ul class="post-grid">
+          <li class="post-card" th:each="cat, iter : ${categories.items}" data-aos="fade-up" th:attr="data-aos-delay=${(iter.index % 3) * 100}">
             <div class="body">
               <h3>
                 <a th:href="@{${cat.status.permalink}}" th:text="${cat.spec.displayName}">Category</a>

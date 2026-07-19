@@ -1,0 +1,106 @@
+<!--
+  About page — dedicated template for photographer introduction.
+  To use: create a page in Halo Console and select "About" template.
+  Left: uploaded portrait image. Right: page title / name + content.
+-->
+<html xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{layout :: layout(title = |${singlePage.spec.title} - ${site.title}|, content = ~{::content})}">
+  <th:block th:fragment="content">
+    <section class="section container" aria-label="关于我">
+      <div class="about-layout">
+        <!-- Left: portrait image -->
+        <div class="about-image" data-aos="fade-up" data-aos-delay="200">
+          <img
+            th:if="${theme.config?.about?.about_image != null}"
+            th:src="${theme.config.about.about_image}"
+            th:alt="${singlePage.spec.title}"
+            loading="lazy"
+          />
+          <div
+            th:unless="${theme.config?.about?.about_image != null}"
+            class="about-placeholder"
+          >
+            <span>请在主题设置中上传图片</span>
+          </div>
+        </div>
+
+        <!-- Right: name + content -->
+        <div class="about-content" data-aos="fade-up" data-aos-delay="400">
+          <h1
+            class="gold-heading about-name"
+            th:if="${theme.config?.about?.about_name != null and theme.config.about.about_name != ''}"
+            th:text="${theme.config.about.about_name}"
+          >姓名</h1>
+          <h1
+            class="gold-heading about-name"
+            th:unless="${theme.config?.about?.about_name != null and theme.config.about.about_name != ''}"
+            th:text="${singlePage.spec.title}"
+          >页面标题</h1>
+
+          <div class="article-content" th:utext="${singlePage.content.content}">
+            <p>在这里写下您的个人介绍。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .about-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        max-width: 1100px;
+        margin: 0 auto;
+        align-items: start;
+      }
+
+      .about-image {
+        border-radius: 5px;
+        overflow: hidden;
+        background-color: var(--color-card-bg);
+      }
+
+      .about-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+      }
+
+      .about-placeholder {
+        aspect-ratio: 3 / 4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-fg-muted);
+        font-size: 0.9rem;
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 5px;
+      }
+
+      .about-name {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        margin-bottom: 32px;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+      }
+
+      .about-content .article-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--color-fg);
+      }
+
+      .about-content .article-content p + p {
+        margin-top: 1.5em;
+      }
+
+      @media (max-width: 768px) {
+        .about-layout {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+      }
+    </style>
+  </th:block>
+</html>

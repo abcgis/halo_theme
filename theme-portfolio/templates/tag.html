@@ -1,20 +1,20 @@
 <!-- Tag detail: posts filtered by the current tag. -->
 <html xmlns:th="https://www.thymeleaf.org"
-      th:replace="~{layout :: layout(title = |Tag: ${tag.spec.displayName} - ${site.title}|, content = ~{::content})}">
+      th:replace="~{layout :: layout(title = |${tag.spec.displayName} - ${site.title}|, content = ~{::content})}">
   <th:block th:fragment="content">
     <section class="page-header">
       <div class="container">
         <h1>
-          Tag: <span th:text="${tag.spec.displayName}">tag-name</span>
+          <span th:text="${tag.spec.displayName}">标签名称</span>
         </h1>
-        <p>All posts tagged with <strong th:text="${tag.spec.displayName}">tag</strong>.</p>
+        <p>所有标记为 <strong th:text="${tag.spec.displayName}">标签</strong> 的文章。</p>
       </div>
     </section>
 
     <div class="container">
       <th:block th:if="${posts != null and not #lists.isEmpty(posts.items)}">
-        <ul class="post-list">
-          <li class="post-card" th:each="post : ${posts.items}">
+        <ul class="post-grid">
+          <li class="post-card" th:each="post, iter : ${posts.items}" data-aos="fade-up" th:attr="data-aos-delay=${(iter.index % 3) * 100}">
             <a
               class="cover"
               th:if="${post.spec.cover != null and not #strings.isEmpty(post.spec.cover)}"
@@ -25,7 +25,7 @@
             </a>
             <div class="body">
               <h3>
-                <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">Title</a>
+                <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">标题</a>
               </h3>
               <p
                 class="excerpt"
@@ -40,8 +40,8 @@
         </ul>
 
         <nav class="pagination" th:if="${posts.totalPages != null and posts.totalPages > 1}">
-          <a th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">&lsaquo; Prev</a>
-          <span th:unless="${posts.hasPrevious()}" class="disabled">&lsaquo; Prev</span>
+          <a th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">&lsaquo; 上一页</a>
+          <span th:unless="${posts.hasPrevious()}" class="disabled">&lsaquo; 上一页</span>
 
           <th:block th:each="p : ${#numbers.sequence(1, posts.totalPages)}">
             <span th:if="${p == posts.page}" class="current" th:text="${p}">1</span>
@@ -52,13 +52,13 @@
             >2</a>
           </th:block>
 
-          <a th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">Next &rsaquo;</a>
-          <span th:unless="${posts.hasNext()}" class="disabled">Next &rsaquo;</span>
+          <a th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">下一页 &rsaquo;</a>
+          <span th:unless="${posts.hasNext()}" class="disabled">下一页 &rsaquo;</span>
         </nav>
       </th:block>
 
       <div class="empty" th:unless="${posts != null and not #lists.isEmpty(posts.items)}">
-        <p>No posts under this tag yet.</p>
+        <p>该标签下暂无文章。</p>
       </div>
     </div>
   </th:block>

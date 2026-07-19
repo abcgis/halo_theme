@@ -14,8 +14,8 @@
 
     <div class="container">
       <th:block th:if="${posts != null and not #lists.isEmpty(posts.items)}">
-        <ul class="post-list">
-          <li class="post-card" th:each="post : ${posts.items}">
+        <ul class="post-grid">
+          <li class="post-card" th:each="post, iter : ${posts.items}" data-aos="fade-up" th:attr="data-aos-delay=${(iter.index % 3) * 100}">
             <a
               class="cover"
               th:if="${post.spec.cover != null and not #strings.isEmpty(post.spec.cover)}"

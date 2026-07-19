@@ -12,11 +12,6 @@
         alt=""
       />
       <span th:text="${site.title}">Site Title</span>
-      <span
-        class="subtitle"
-        th:if="${theme.config.seo?.site_subtitle != null and not #strings.isEmpty(theme.config.seo.site_subtitle)}"
-        th:text="${theme.config.seo.site_subtitle}"
-      ></span>
     </a>
 
     <!--

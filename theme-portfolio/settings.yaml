@@ -4,65 +4,129 @@ metadata:
   name: theme-portfolio-setting
 spec:
   forms:
+    - group: hero
+      label: Hero 首页横幅
+      formSchema:
+        - $formkit: text
+          name: hero_title
+          label: Hero 标题
+          value: "每一帧都是艺术"
+          help: 首页 Hero 区域显示的主标题。
+        - $formkit: text
+          name: hero_subtitle
+          label: Hero 副标题
+          value: "你的情感 - 我的故事"
+          help: 标题下方显示的副标题。
+        - $formkit: text
+          name: hero_cta_text
+          label: Hero 按钮文字
+          value: "查看作品"
+          help: Hero 区域行动按钮的标签文字。
+        - $formkit: text
+          name: hero_cta_link
+          label: Hero 按钮链接
+          value: "#work"
+          help: 按钮跳转的 URL 或锚点。
+        - $formkit: attachment
+          name: hero_image
+          label: Hero 背景图片
+          value: ""
+          help: 首页 Hero 的全屏背景图。留空则使用渐变背景。
     - group: style
-      label: Style
+      label: 样式设置
       formSchema:
         - $formkit: radio
           name: color_scheme
-          label: Default color scheme
-          value: light
-          help: Light mode is the default. Choose dark or follow the system.
+          label: 配色方案
+          value: dark
+          help: 本主题专为深色模式设计。浅色模式可用但不推荐。
           options:
-            - label: Follow system
+            - label: 跟随系统
               value: system
-            - label: Light
+            - label: 浅色模式
               value: light
-            - label: Dark
+            - label: 深色模式
               value: dark
         - $formkit: text
           name: accent_color
-          label: Accent color (CSS color)
+          label: 强调色 (CSS 颜色值)
           value: "#f7b731"
-          help: Used for active nav underline, button hover, and links.
+          help: 用于标题、悬停状态和高亮的金色强调色。
     - group: layout
-      label: Layout
+      label: 布局设置
       formSchema:
         - $formkit: select
           name: posts_per_page
-          label: Posts per page (index)
+          label: 每页文章数 (首页)
           value: "6"
           options:
             - label: 6
               value: "6"
+            - label: 9
+              value: "9"
             - label: 12
               value: "12"
-            - label: 24
-              value: "24"
         - $formkit: switch
           name: show_sidebar
-          label: Show sidebar on post pages
+          label: 在文章页显示侧边栏
           value: false
           onValue: true
           offValue: false
-    - group: seo
-      label: Identity & Footer
+    - group: about
+      label: 关于我
+      formSchema:
+        - $formkit: attachment
+          name: about_image
+          label: 关于我页面头像图片
+          value: ""
+          help: 关于我页面左侧显示的个人照片。建议尺寸 600x800 像素。
+        - $formkit: text
+          name: about_name
+          label: 姓名
+          value: ""
+          help: 显示在右侧的金色大标题，留空则使用页面标题。
+        - $formkit: text
+          name: about_subtitle
+          label: 页面副标题
+          value: "关于我"
+          help: 页面顶部居中的副标题。
+    - group: social
+      label: 社交链接
       formSchema:
         - $formkit: text
-          name: site_subtitle
-          label: Site subtitle (shown in header)
-          value: Selected work & notes
-        - $formkit: text
-          name: hero_title
-          label: Hero title (homepage)
+          name: social_email
+          label: 邮箱地址
           value: ""
-          help: Leave empty to use the site title.
+        - $formkit: text
+          name: social_phone
+          label: 电话号码
+          value: ""
+        - $formkit: text
+          name: social_instagram
+          label: Instagram 链接
+          value: ""
+        - $formkit: text
+          name: social_facebook
+          label: Facebook 链接
+          value: ""
+        - $formkit: text
+          name: social_telegram
+          label: Telegram 链接
+          value: ""
+        - $formkit: text
+          name: social_github
+          label: GitHub 链接
+          value: ""
+    - group: footer
+      label: 页脚设置
+      formSchema:
         - $formkit: textarea
           name: footer_text
-          label: Footer text
-          value: "© 2026. All rights reserved."
+          label: 页脚文字
+          value: "© 2026. 保留所有权利。"
         - $formkit: switch
           name: show_rss
-          label: Show RSS link in footer
+          label: 在页脚显示 RSS 链接
           value: true
           onValue: true
           offValue: false

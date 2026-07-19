@@ -1,109 +1,62 @@
 <!--
-  Home page — hero (full-viewport display) + portfolio grid below.
-  Eyebrow / title / subtitle / actions all fadeUp on load (CSS animation).
+  Home page — full-viewport hero.
+  Hero title/subtitle/CTA animate in with AOS-like delays.
 -->
 <html xmlns:th="https://www.thymeleaf.org"
       th:replace="~{layout :: layout(title = ${site.title}, content = ~{::content})}">
   <th:block th:fragment="content">
     <section class="hero" aria-label="Introduction">
-      <span class="eyebrow">Welcome</span>
-      <h1 class="title" th:text="${site.title}">Site Title</h1>
+      <div
+        class="hero-bg"
+        th:if="${theme.config?.hero?.hero_image != null and not #strings.isEmpty(theme.config.hero.hero_image)}"
+        th:style="|background-image: url('${theme.config.hero.hero_image}');|"
+      ></div>
+      <div
+        class="hero-fallback"
+        th:unless="${theme.config?.hero?.hero_image != null and not #strings.isEmpty(theme.config.hero.hero_image)}"
+      ></div>
+      <div class="hero-overlay"></div>
+
+      <h1
+        class="title"
+        data-aos="fade-down"
+        th:if="${theme.config?.hero?.hero_title != null and not #strings.isEmpty(theme.config.hero.hero_title)}"
+        th:text="${theme.config.hero.hero_title}"
+      >Art in Every Frame</h1>
+      <h1
+        class="title"
+        data-aos="fade-down"
+        th:unless="${theme.config?.hero?.hero_title != null and not #strings.isEmpty(theme.config.hero.hero_title)}"
+        th:text="${site.title}"
+      >Site Title</h1>
+
       <p
         class="subtitle"
-        th:if="${site.subtitle != null and not #strings.isEmpty(site.subtitle)}"
-        th:text="${site.subtitle}"
-      >A line about the work.</p>
+        data-aos="fade-up"
+        data-aos-delay="200"
+        th:if="${theme.config?.hero?.hero_subtitle != null and not #strings.isEmpty(theme.config.hero.hero_subtitle)}"
+        th:text="${theme.config.hero.hero_subtitle}"
+      >Your emotions - my story.</p>
       <p
         class="subtitle"
-        th:unless="${site.subtitle != null and not #strings.isEmpty(site.subtitle)}"
-      >Selected work, notes, and experiments.</p>
+        data-aos="fade-up"
+        data-aos-delay="200"
+        th:unless="${theme.config?.hero?.hero_subtitle != null and not #strings.isEmpty(theme.config.hero.hero_subtitle)}"
+      >摄影作品集 & 视觉故事。</p>
 
-      <div class="actions">
-        <a class="btn btn-primary" href="#work">View Work</a>
-      </div>
-    </section>
-
-    <hr class="divider" />
-
-    <section class="section container" id="work" aria-label="Latest work">
-      <p class="section-title">Selected</p>
-      <h2 class="section-heading">Latest</h2>
-      <p class="section-intro">
-        A small selection of recent posts. Click any card to read in full.
-      </p>
-
-      <th:block th:if="${posts != null and not #lists.isEmpty(posts.items)}">
-        <ul class="post-grid">
-          <li class="post-card" th:each="post, iter : ${posts.items}"
-              th:attrappend="style=|animation-delay: ${0.05 * iter.index}s|">
-            <a
-              class="cover"
-              th:if="${post.spec.cover != null and not #strings.isEmpty(post.spec.cover)}"
-              th:href="@{${post.status.permalink}}"
-              aria-hidden="true"
-              tabindex="-1"
-            >
-              <img th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy" />
-            </a>
-
-            <div class="body">
-              <h3>
-                <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">Title</a>
-              </h3>
-
-              <p
-                class="excerpt"
-                th:if="${post.status.excerpt != null and not #strings.isEmpty(post.status.excerpt)}"
-                th:text="${post.status.excerpt}"
-              ></p>
-
-              <div class="meta">
-                <time th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2024-01-01</time>
-                <span
-                  th:if="${post.categories != null and not #lists.isEmpty(post.categories)}"
-                >·</span>
-                <a
-                  th:each="cat,iter : ${post.categories}"
-                  th:if="${iter.index < 1}"
-                  th:href="@{${cat.status.permalink}}"
-                  th:text="${cat.spec.displayName}"
-                ></a>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-        <!-- Pagination -->
-        <nav class="pagination" th:if="${posts.totalPages != null and posts.totalPages > 1}" aria-label="Pagination">
-          <a
-            th:if="${posts.hasPrevious()}"
-            th:href="@{${posts.prevUrl}}"
-            rel="prev"
-          >&lsaquo; Prev</a>
-          <span th:unless="${posts.hasPrevious()}" class="disabled">&lsaquo; Prev</span>
-
-          <th:block th:each="p : ${#numbers.sequence(1, posts.totalPages)}">
-            <span th:if="${p == posts.page}" class="current" th:text="${p}">1</span>
-            <a
-              th:unless="${p == posts.page}"
-              th:href="@{${p == 1 ? '/' : ('/?page=' + p)}}"
-              th:text="${p}"
-            >2</a>
-          </th:block>
-
-          <a
-            th:if="${posts.hasNext()}"
-            th:href="@{${posts.nextUrl}}"
-            rel="next"
-          >Next &rsaquo;</a>
-          <span th:unless="${posts.hasNext()}" class="disabled">Next &rsaquo;</span>
-        </nav>
-      </th:block>
-
-      <div class="empty" th:unless="${posts != null and not #lists.isEmpty(posts.items)}">
-        <p style="text-align:center; color: var(--color-fg-muted); padding: 48px 0;">
-          No posts yet. Publish something from the Halo Console to see it here.
-        </p>
+      <div class="actions" data-aos="zoom-in" data-aos-delay="400">
+        <a
+          class="btn btn-primary"
+          th:if="${theme.config?.hero?.hero_cta_link != null and not #strings.isEmpty(theme.config.hero.hero_cta_link)}"
+          th:href="${theme.config.hero.hero_cta_link}"
+          th:text="${theme.config?.hero?.hero_cta_text ?: '查看作品'}"
+        >查看作品</a>
+        <a
+          class="btn btn-primary"
+          th:unless="${theme.config?.hero?.hero_cta_link != null and not #strings.isEmpty(theme.config.hero.hero_cta_link)}"
+          href="#work"
+          th:text="${theme.config?.hero?.hero_cta_text ?: '查看作品'}"
+        >查看作品</a>
       </div>
     </section>
   </th:block>

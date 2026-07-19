@@ -6,10 +6,10 @@
   before the user has saved the settings form (empty config tree).
 -->
 <html
-  lang="en"
+  lang="zh"
   xmlns:th="https://www.thymeleaf.org"
   th:fragment="layout (title, content)"
-  th:attr="data-theme=${theme.config?.style?.color_scheme ?: 'system'}"
+  th:attr="data-theme=${theme.config?.style?.color_scheme ?: 'dark'}"
 >
   <head>
     <meta charset="UTF-8" />
@@ -43,7 +43,7 @@
 
     <th:block th:replace="~{modules/footer}" />
 
-    <!-- JS loaded with cache-busting; main.js handles the theme toggle. -->
+    <!-- JS loaded with cache-busting; main.js handles the theme toggle + AOS -->
     <script
       th:src="@{/assets/js/main.js?v={v}(v=${theme.spec.version})}"
       defer

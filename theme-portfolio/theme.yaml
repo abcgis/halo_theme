@@ -8,10 +8,7 @@ spec:
     name: ABCGIS
     website: https://www.halo.run
   description: |
-    A clean, responsive portfolio theme for showcasing projects, posts, and
-    personal work. Demonstrates the core features of Halo 2.x: Thymeleaf layout
-    reuse, Finder APIs, theme settings form, light/dark mode, pagination,
-    archives, categories, tags, custom post templates and error pages.
+    Halo 2.x 深色极简摄影作品集主题。包含全屏 Hero、卡片网格画廊、深色沉浸式 UI、金色强调色、AOS 动画和可自定义的背景图。非常适合摄影师和视觉艺术家。
   logo: /themes/theme-portfolio/assets/images/logo.svg
   homepage: https://github.com/abcgis/halo_theme
   repo: https://github.com/abcgis/halo_theme.git
@@ -19,16 +16,26 @@ spec:
   settingName: theme-portfolio-setting
   configMapName: theme-portfolio-configmap
   customTemplates:
+    page:
+      - name: 关于我
+        description: 左侧图片、右侧姓名与介绍的摄影师个人介绍页面。
+        screenshot:
+        file: about.html
+      - name: 作品集网格
+        description: 用于展示作品分类或画廊的卡片网格布局。
+        screenshot:
+        file: portfolio.html
+      - name: 联系我们
+        description: 包含联系方式、社交链接和留言表单的专用联系页面。
+        screenshot:
+        file: contact.html
     post:
-      - name: Docs Layout
-        description: A two-column documentation layout with a sticky table of contents.
+      - name: 文档布局
+        description: 带有固定目录的双栏文档布局。
         screenshot:
         file: post-types/post-docs.html
-  version: 1.0.0
-  requires: ">=2.0.0"
+  version: 2.0.0
+  requires: ">=2.20.0"
   license:
     - name: "Apache-2.0 license"
       url: "https://github.com/abcgis/halo_theme/blob/main/LICENSE"
-
-
-

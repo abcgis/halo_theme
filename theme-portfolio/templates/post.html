@@ -13,7 +13,7 @@
             ></time>
             <span
               th:if="${post.owner != null}"
-            >· by <a th:href="@{|/authors/${post.spec.owner}|}" th:text="${post.owner.displayName}">Author</a></span>
+            >· by <a th:href="@{|/authors/${post.spec.owner}|}" th:text="${post.owner.displayName}">作者</a></span>
             <span
               th:if="${post.categories != null and not #lists.isEmpty(post.categories)}"
             >· in
@@ -48,16 +48,16 @@
             th:href="@{${cursor.previous.status.permalink}}"
             class="prev"
           >
-            <div class="label">&lsaquo; Previous</div>
-            <div class="title" th:text="${cursor.previous.spec.title}">Prev</div>
+            <div class="label">&lsaquo; 上一篇</div>
+            <div class="title" th:text="${cursor.previous.spec.title}">上一篇</div>
           </a>
           <a
             th:if="${cursor.hasNext()}"
             th:href="@{${cursor.next.status.permalink}}"
             class="next"
           >
-            <div class="label">Next &rsaquo;</div>
-            <div class="title" th:text="${cursor.next.spec.title}">Next</div>
+            <div class="label">下一篇 &rsaquo;</div>
+            <div class="title" th:text="${cursor.next.spec.title}">下一篇</div>
           </a>
         </nav>
 
@@ -80,7 +80,7 @@
           allTags     = ${tagFinder.listAll()}"
       >
         <section class="sidebar-card">
-          <h4>Recent posts</h4>
+          <h4>最新文章</h4>
           <ul>
             <li th:each="p : ${recentPosts.items}">
               <a th:href="@{${p.status.permalink}}" th:text="${p.spec.title}"></a>
@@ -88,7 +88,7 @@
           </ul>
         </section>
         <section class="sidebar-card">
-          <h4>Tags</h4>
+          <h4>标签</h4>
           <div class="tag-list">
             <a
               class="tag"

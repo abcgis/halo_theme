@@ -1,39 +1,67 @@
-<!-- Archives page: posts grouped by year then month. -->
+<!--
+  Archives page — card grid layout, matching the home page's "Latest Work" style.
+  All posts displayed in a flat card grid without year/month grouping.
+-->
 <html xmlns:th="https://www.thymeleaf.org"
-      th:replace="~{layout :: layout(title = |Archives - ${site.title}|, content = ~{::content})}">
+      th:replace="~{layout :: layout(title = |归档 - ${site.title}|, content = ~{::content})}">
   <th:block th:fragment="content">
-    <section class="page-header">
-      <div class="container">
-        <h1>Archives</h1>
-        <p>All posts grouped by publish date.</p>
-      </div>
-    </section>
-
-    <div class="container">
+    <div class="container" style="padding-bottom: 96px; padding-top: 120px;">
       <th:block th:if="${archives != null and not #lists.isEmpty(archives.items)}">
-        <th:block th:each="archive : ${archives.items}">
-          <h2 class="archive-year" th:text="${archive.year}">2024</h2>
-          <th:block th:each="month : ${archive.months}">
-            <h3 class="archive-month" th:text="|${month.month}|">1</h3>
-            <ul class="archive-list">
-              <li th:each="post : ${month.posts}">
-                <time
-                  th:datetime="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}"
-                  th:text="${#temporals.format(post.spec.publishTime, 'MM-dd')}"
-                >01-01</time>
-                <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">Title</a>
+        <ul class="post-grid">
+          <th:block th:each="archive : ${archives.items}">
+            <th:block th:each="month : ${archive.months}">
+              <li
+                class="post-card"
+                th:each="post, iter : ${month.posts}"
+                data-aos="fade-up"
+                th:attr="data-aos-delay=${(iter.index % 3) * 100}"
+              >
+                <a
+                  class="cover"
+                  th:if="${post.spec.cover != null and not #strings.isEmpty(post.spec.cover)}"
+                  th:href="@{${post.status.permalink}}"
+                  aria-hidden="true"
+                  tabindex="-1"
+                >
+                  <img th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy" />
+                </a>
+
+                <div class="body">
+                  <h3>
+                    <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">标题</a>
+                  </h3>
+
+                  <p
+                    class="excerpt"
+                    th:if="${post.status.excerpt != null and not #strings.isEmpty(post.status.excerpt)}"
+                    th:text="${post.status.excerpt}"
+                  ></p>
+
+                  <div class="meta">
+                    <time th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2024-01-01</time>
+                    <span
+                      th:if="${post.categories != null and not #lists.isEmpty(post.categories)}"
+                    >·</span>
+                    <a
+                      th:each="cat,iter : ${post.categories}"
+                      th:if="${iter.index < 1}"
+                      th:href="@{${cat.status.permalink}}"
+                      th:text="${cat.spec.displayName}"
+                    ></a>
+                  </div>
+                </div>
               </li>
-            </ul>
+            </th:block>
           </th:block>
-        </th:block>
+        </ul>
 
         <nav class="pagination" th:if="${archives.totalPages != null and archives.totalPages > 1}">
           <a
             th:if="${archives.hasPrevious()}"
             th:href="@{${archives.prevUrl}}"
             rel="prev"
-          >&lsaquo; Prev</a>
-          <span th:unless="${archives.hasPrevious()}" class="disabled">&lsaquo; Prev</span>
+          >&lsaquo; 上一页</a>
+          <span th:unless="${archives.hasPrevious()}" class="disabled">&lsaquo; 上一页</span>
 
           <th:block th:each="p : ${#numbers.sequence(1, archives.totalPages)}">
             <span th:if="${p == archives.page}" class="current" th:text="${p}">1</span>
@@ -48,13 +76,13 @@
             th:if="${archives.hasNext()}"
             th:href="@{${archives.nextUrl}}"
             rel="next"
-          >Next &rsaquo;</a>
-          <span th:unless="${archives.hasNext()}" class="disabled">Next &rsaquo;</span>
+          >下一页 &rsaquo;</a>
+          <span th:unless="${archives.hasNext()}" class="disabled">下一页 &rsaquo;</span>
         </nav>
       </th:block>
 
       <div class="empty" th:unless="${archives != null and not #lists.isEmpty(archives.items)}">
-        <p>No archives yet.</p>
+        <p>暂无归档内容。</p>
       </div>
     </div>
   </th:block>
